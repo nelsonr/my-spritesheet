@@ -41,10 +41,8 @@ export default function Spritesheet() {
                 sendFile
                     .then((resp) => resp.json())
                     .then((data) => {
-                        const image = new Blob([new Uint8Array(data.image.data)], { type: 'image/png' });
-                        
                         const preview: Preview = {
-                            image: image,
+                            image: data.image,
                             width: data.properties.width,
                             height: data.properties.height,
                             css: data.css,
@@ -58,9 +56,9 @@ export default function Spritesheet() {
 
     const ImagePreview = () => {
         if (preview.image) {
-            const imageURL = URL.createObjectURL(preview.image);
+            const imageURL = `data:image/png;base64, ${preview.image}`;
 
-            return <Image width={preview.width} height={preview.height} alt="spritesheet" src={imageURL} />;
+            return <Image width={preview.width} height={preview.height} layout="intrinsic" alt="spritesheet" src={imageURL} />;
         }
 
         return null;
@@ -70,13 +68,22 @@ export default function Spritesheet() {
         <div className='section'>
             <div className="container is-flex is-flex-direction-column">
                 <div className="block">
+                    <h2 className='title'>Sprite Sheet Maker</h2>
                     <form onSubmit={onSubmit}>
                         <div className="field is-horizontal">
                             <div className="field-body">
                                 <div className="field is-flex-grow-1">
                                     <div className="file has-name is-fullwidth">
                                         <label className='file-label' htmlFor="image">
-                                            <input className='file-input' ref={fileInputRef} onChange={(ev) => setFileInput(ev.target.value)} type="file" name="image" id="image" multiple />
+                                            <input 
+                                                ref={fileInputRef} 
+                                                className='file-input' 
+                                                onChange={(ev) => setFileInput(ev.target.value)} 
+                                                type="file" 
+                                                name="image" 
+                                                id="image" 
+                                                multiple
+                                            />
                                     
                                             <span className="file-cta">
                                                 <span className="file-icon">
@@ -93,7 +100,13 @@ export default function Spritesheet() {
 
                                 <div className="field is-flex-grow-0">
                                     <div className="control">
-                                        <button className='button is-link' type="submit">Create Spritesheet</button>
+                                        <button 
+                                            type="submit"
+                                            className='button is-link' 
+                                            disabled={fileInput.length < 1}
+                                        >
+                                            Create Spritesheet
+                                        </button>
                                     </div>
                                 </div>
                             </div>
@@ -101,11 +114,11 @@ export default function Spritesheet() {
                     </form>
                 </div>
 
-                <div className="block is-flex is-flex-direction-column is-flex-grow-1">
-                    <div className='is-flex-grow-1 is-flex is-flex-direction-column'>
-                        <pre className='is-flex-grow-1'>{preview.css}</pre>
+                <div className="block is-flex-grow-1 columns is-scrollable">
+                    <div className='column'>
+                        <pre className='is-flex-grow-1 is-scrollable'>{preview.css}</pre>
                     </div>
-                    <div className='is-flex-grow-1'>
+                    <div className='column'>
                         <ImagePreview />
                     </div>
                 </div>

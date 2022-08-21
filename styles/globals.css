@@ -1,6 +1,10 @@
 @import "../public/fontawesome/css/all.css";
 @import "../public/bulma.min.css";
 
+html, body {
+  overflow: hidden;
+}
+
 main {
   display: flex;
   flex-direction: column;
@@ -10,4 +14,11 @@ main {
 main > .section {
   display: flex;
   flex: 1;
+  height: 100%;
+}
+
+.is-scrollable {
+  height: 100%;
+  overflow-y: auto;
+  overflow-x: hidden;
 }

@@ -39,5 +39,5 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         console.log(error);
     }
     
-    res.status(200).json(spritesheet);
+    res.status(200).json({ ...spritesheet, image: spritesheet.image.toString('base64') });
 }

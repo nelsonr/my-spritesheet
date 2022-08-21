@@ -8,7 +8,7 @@ export type SpritesmithCoordinates = {
 };
 
 export type SpritesmithResult = {
-    image: Uint8Array;
+    image: Buffer;
     coordinates: SpritesmithCoordinates;
     properties: {
         width: number;
@@ -17,7 +17,7 @@ export type SpritesmithResult = {
 };
 
 export type SpriteSheet = {
-    image: Uint8Array;
+    image: Buffer;
     css: string;
     properties: {
         width: number;
