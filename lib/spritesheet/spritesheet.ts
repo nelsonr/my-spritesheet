@@ -2,6 +2,7 @@ import path from 'path';
 import { mkdirSync, readdirSync } from 'fs';
 import { writeFile } from 'fs/promises';
 import outdent from 'outdent';
+import pixelsmith from 'pixelsmith';
 import Spritesmith from 'spritesmith';
 
 import {
@@ -74,7 +75,11 @@ export function generateSpriteSheet(
 
     const promise: Promise<SpriteSheet> = new Promise((resolve, reject) => {
         Spritesmith.run(
-            { src: images, padding: 10 },
+            { 
+                src: images, 
+                padding: 10,
+                engine: pixelsmith 
+            },
             (err: Error | null, result: SpritesmithResult | null) => {
                 if (err) {
                     return reject(err);
