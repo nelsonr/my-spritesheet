@@ -35,9 +35,13 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const imagesList: formidable.File[] = Array.isArray(files.images) ? files.images : [files.images];
         const imageFilePaths = imagesList.map((file) => file.filepath);
         spritesheet = await generateSpriteSheet(imageFilePaths, 'sprite');
+
+        const imageBase64 = `data:image/png;base64, ${spritesheet.image.toString('base64')}`;
+
+        res.status(200).json({ ...spritesheet, image: imageBase64  });
     } catch (error) {
         console.log(error);
+
+        res.status(500);
     }
-    
-    res.status(200).json({ ...spritesheet, image: spritesheet.image.toString('base64') });
 }

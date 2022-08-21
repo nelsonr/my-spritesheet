@@ -22,3 +22,9 @@ main > .section {
   overflow-y: auto;
   overflow-x: hidden;
 }
+
+.sprites {
+  display: flex;
+  flex-wrap: wrap;
+  grid-gap: 1em;
+}

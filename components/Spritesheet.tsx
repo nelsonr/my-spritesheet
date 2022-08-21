@@ -2,7 +2,7 @@ import { useState, createRef, FormEvent } from 'react';
 import Image from 'next/image';
 
 type Preview = {
-    image: Blob | null;
+    image: string | null;
     css: string | null;
     width: number;
     height: number;
@@ -19,6 +19,24 @@ export default function Spritesheet() {
 
     const fileInputRef = createRef<HTMLInputElement>();
     const endpoint = '/api/spritesheet';
+
+    const onFileInputChange = (ev) => {
+        if (ev.target.files.length > 1) {
+            setFileInput(`${ev.target.files.length} files selected...`);
+        } else if (ev.target.files.length > 0) {
+            setFileInput(ev.target.files[0].name);
+        } else {
+            setFileInput('');
+        }
+    };
+
+    const getSpriteClasses = (css: string) => {
+        const spriteClassRegex = /^\.(sprite--.*):after {/gm;
+        const matches = css.matchAll(spriteClassRegex);
+        const classes = Array.from(matches).map((match) => match[1]);
+
+        return classes;
+    }
 
     const onSubmit = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
@@ -40,29 +58,35 @@ export default function Spritesheet() {
 
                 sendFile
                     .then((resp) => resp.json())
-                    .then((data) => {
-                        const preview: Preview = {
-                            image: data.image,
-                            width: data.properties.width,
-                            height: data.properties.height,
-                            css: data.css,
-                        };
-
-                        setPreview(preview);
+                    .then((data: Preview) => {
+                        getSpriteClasses(data.css);
+                        setPreview(data);
                     });
             }
         }
     };
 
-    const ImagePreview = () => {
-        if (preview.image) {
-            const imageURL = `data:image/png;base64, ${preview.image}`;
+    const SpritesPreview = ({ css, bg }) => {
+        if (css && bg) {
+            const size = { '--size': 64 } as React.CSSProperties;
+            const spriteClasses = getSpriteClasses(css || '');
+            const finalCSS = css.replace('sprite.png', bg);
+            const sprites = spriteClasses.map((spriteClass, index) => {
+                const className = `sprite ${spriteClass}`;
 
-            return <Image width={preview.width} height={preview.height} layout="intrinsic" alt="spritesheet" src={imageURL} />;
+                return (<div key={index} className={className} style={size}></div>);
+            });
+        
+            return (
+                <>
+                    <style>{finalCSS}</style>
+                    <div className='sprites'>{sprites}</div> 
+                </>
+            );
         }
 
         return null;
-    };
+    }
 
     return (
         <div className='section'>
@@ -78,7 +102,7 @@ export default function Spritesheet() {
                                             <input 
                                                 ref={fileInputRef} 
                                                 className='file-input' 
-                                                onChange={(ev) => setFileInput(ev.target.value)} 
+                                                onChange={onFileInputChange} 
                                                 type="file" 
                                                 name="image" 
                                                 id="image" 
@@ -119,7 +143,9 @@ export default function Spritesheet() {
                         <pre className='is-flex-grow-1 is-scrollable'>{preview.css}</pre>
                     </div>
                     <div className='column'>
-                        <ImagePreview />
+                        <div className="block is-scrollable">
+                            <SpritesPreview css={preview.css} bg={preview.image} />
+                        </div>
                     </div>
                 </div>
             </div>

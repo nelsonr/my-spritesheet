@@ -19,8 +19,6 @@ export type SpritesmithResult = {
 export type SpriteSheet = {
     image: Buffer;
     css: string;
-    properties: {
-        width: number;
-        height: number;
-    }
+    width: number;
+    height: number;
 };
