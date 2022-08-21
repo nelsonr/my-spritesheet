@@ -90,6 +90,7 @@ export function generateSpriteSheet(
 
                     resolve({
                         image: result.image,
+                        properties: result.properties,
                         css: generateStyleSheet(
                             result.coordinates,
                             imageSize,

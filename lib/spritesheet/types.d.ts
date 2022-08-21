@@ -19,4 +19,8 @@ export type SpritesmithResult = {
 export type SpriteSheet = {
     image: Uint8Array;
     css: string;
+    properties: {
+        width: number;
+        height: number;
+    }
 };
