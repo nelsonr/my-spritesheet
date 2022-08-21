@@ -2,7 +2,6 @@ import { NextApiRequest, NextApiResponse } from 'next';
 import formidable from 'formidable';
 import { generateSpriteSheet } from '../../lib/spritesheet/spritesheet';
 import type { SpriteSheet } from '../../lib/spritesheet/types';
-import Spritesheet from '../../components/Spritesheet';
 
 type FormidableFormData = {
     fields: formidable.Fields;
@@ -16,7 +15,6 @@ export const config = {
 };
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
-    // const formData = new FormData();
     let spritesheet: SpriteSheet;
     
     try {
@@ -37,9 +35,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const imagesList: formidable.File[] = Array.isArray(files.images) ? files.images : [files.images];
         const imageFilePaths = imagesList.map((file) => file.filepath);
         spritesheet = await generateSpriteSheet(imageFilePaths, 'sprite');
-
-        // formData.append('css', spritesheet.css);
-        // formData.append('image', new Blob([spritesheet.image.buffer]));
     } catch (error) {
         console.log(error);
     }

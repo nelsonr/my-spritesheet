@@ -13,6 +13,7 @@
     "formidable": "^3.2.4",
     "next": "12.2.5",
     "outdent": "^0.8.0",
+    "pixelsmith": "^2.6.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "spritesmith": "^3.4.0"
