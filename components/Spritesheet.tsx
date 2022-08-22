@@ -1,5 +1,6 @@
 import { useState, createRef, FormEvent } from 'react';
 import Download from './Download';
+import If from './If';
 
 type Preview = {
     image: string | null;
@@ -150,7 +151,9 @@ export default function Spritesheet() {
                 </div>
 
                 <div className="block is-flex is-justify-content-center">
-                    <Download css={preview.css} image={preview.image} />
+                    <If condition={preview.image && preview.css}>
+                        <Download image={preview.image} css={preview.css} />
+                    </If>                    
                 </div>
             </div>
         </div>
