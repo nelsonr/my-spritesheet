@@ -36,7 +36,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const imageFilePaths = imagesList.map((file) => file.filepath);
         spritesheet = await generateSpriteSheet(imageFilePaths, 'sprite');
 
-        const imageBase64 = `data:image/png;base64, ${spritesheet.image.toString('base64')}`;
+        const imageBase64 = spritesheet.image.toString('base64');
 
         res.status(200).json({ ...spritesheet, image: imageBase64  });
     } catch (error) {

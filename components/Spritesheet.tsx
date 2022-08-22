@@ -1,6 +1,8 @@
 import { useState, createRef, FormEvent } from 'react';
 import Download from './Download';
+import { getSpriteClasses } from '../libs/utils';
 import If from './If';
+import SpritesPreview from './SpritesPreview';
 
 type Preview = {
     image: string | null;
@@ -10,7 +12,9 @@ type Preview = {
 };
 
 export default function Spritesheet() {
-    const [fileInput, setFileInput] = useState('');
+    const fileInputPlaceholder = 'Add images to create a new sprite sheet...';
+    
+    const [fileInput, setFileInput] = useState(fileInputPlaceholder);
     const [preview, setPreview] = useState<Preview>({
         css: null,
         image: null,
@@ -20,24 +24,16 @@ export default function Spritesheet() {
 
     const fileInputRef = createRef<HTMLInputElement>();
     const endpoint = '/api/spritesheet';
-
+    
     const onFileInputChange = (ev) => {
         if (ev.target.files.length > 1) {
             setFileInput(`${ev.target.files.length} files selected...`);
         } else if (ev.target.files.length > 0) {
             setFileInput(ev.target.files[0].name);
         } else {
-            setFileInput('');
+            setFileInput(fileInputPlaceholder);
         }
     };
-
-    const getSpriteClasses = (css: string) => {
-        const spriteClassRegex = /^\.(sprite--.*):after {/gm;
-        const matches = css.matchAll(spriteClassRegex);
-        const classes = Array.from(matches).map((match) => match[1]);
-
-        return classes;
-    }
 
     const onSubmit = async (ev: FormEvent<HTMLFormElement>) => {
         ev.preventDefault();
@@ -66,28 +62,6 @@ export default function Spritesheet() {
             }
         }
     };
-
-    const SpritesPreview = ({ css, bg }) => {
-        if (css && bg) {
-            const size = { '--size': 64 } as React.CSSProperties;
-            const spriteClasses = getSpriteClasses(css || '');
-            const finalCSS = css.replace('sprite.png', bg);
-            const sprites = spriteClasses.map((spriteClass, index) => {
-                const className = `sprite ${spriteClass}`;
-
-                return (<div key={index} className={className} style={size}></div>);
-            });
-        
-            return (
-                <>
-                    <style>{finalCSS}</style>
-                    <div className='sprites'>{sprites}</div> 
-                </>
-            );
-        }
-
-        return null;
-    }
 
     return (
         <div className='section'>
