@@ -1,5 +1,5 @@
 import { useState, createRef, FormEvent } from 'react';
-import Image from 'next/image';
+import Download from './Download';
 
 type Preview = {
     image: string | null;
@@ -147,6 +147,10 @@ export default function Spritesheet() {
                             <SpritesPreview css={preview.css} bg={preview.image} />
                         </div>
                     </div>
+                </div>
+
+                <div className="block is-flex is-justify-content-center">
+                    <Download css={preview.css} image={preview.image} />
                 </div>
             </div>
         </div>

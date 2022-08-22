@@ -10,7 +10,9 @@
   },
   "dependencies": {
     "@types/formidable": "^2.0.5",
+    "file-saver": "^2.0.5",
     "formidable": "^3.2.4",
+    "jszip": "^3.10.1",
     "next": "12.2.5",
     "outdent": "^0.8.0",
     "pixelsmith": "^2.6.0",
