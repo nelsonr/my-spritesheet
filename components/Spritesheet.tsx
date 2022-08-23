@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { getSpriteClasses } from '../libs/utils';
 import If from './If';
 import UploadForm from './UploadForm';
 import SpritesPreview from './SpritesPreview';
@@ -19,28 +18,24 @@ export default function Spritesheet() {
         width: 0,
         height: 0
     });
-
-    const endpoint = '/api/spritesheet';
-
+    
     const onSubmit = (files: File[]) => {
-        if (files && files.length > 0) {
+        if (files.length > 0) {
+            const endpoint = '/api/spritesheet';
             const formData = new FormData();
 
             for (const file of files) {
                 formData.append('images', file);
             }
 
-            const sendFile = fetch(endpoint, {
+            const upload = fetch(endpoint, {
                 method: 'POST',
                 body: formData,
             });
 
-            sendFile
+            upload
                 .then((resp) => resp.json())
-                .then((data: Preview) => {
-                    getSpriteClasses(data.css);
-                    setPreview(data);
-                });
+                .then((data: Preview) => setPreview(data));
         }
     };
 
