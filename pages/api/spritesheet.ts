@@ -20,7 +20,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     try {
         const { files }: FormidableFormData = await new Promise((resolve, reject) => { 
             const form = formidable({
-                keepExtensions: true
+                keepExtensions: true,
+                filename: (name, ext) => name + ext 
             });
 
             form.parse(req, async (err, fields, files) => {
